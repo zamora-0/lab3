@@ -13,12 +13,14 @@ import java.util.Locale;
 public class CommentExtractor {
 
     private boolean inBlockComment;
+    private boolean inJavadocComment;
 
     /**
      * Resets multi-line comment state before processing a new file.
      */
     public void reset() {
         this.inBlockComment = false;
+        this.inJavadocComment = false;
     }
 
     /**
@@ -51,6 +53,14 @@ public class CommentExtractor {
         for (int i = 0; i < len; i++) {
             char ch = line.charAt(i);
             char next = (i + 1 < len) ? line.charAt(i + 1) : '\0';
+
+            if (inJavadocComment) {
+                if (ch == '*' && next == '/') {
+                    inJavadocComment = false;
+                    i++;
+                }
+                continue;
+            }
 
             if (inBlockComment) {
                 if (ch == '*' && next == '/') {
@@ -88,8 +98,14 @@ public class CommentExtractor {
                 comment.append(line, i + 2, len);
                 break;
             } else if (ch == '/' && next == '*') {
-                inBlockComment = true;
-                i++;
+                char third = (i + 2 < len) ? line.charAt(i + 2) : '\0';
+                if (third == '*' && (i + 3 >= len || line.charAt(i + 3) != '/')) {
+                    inJavadocComment = true;
+                    i += 2;
+                } else {
+                    inBlockComment = true;
+                    i++;
+                }
             }
         }
         return comment.toString().trim();
