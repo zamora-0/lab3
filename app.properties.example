@@ -1,0 +1,6 @@
+# Директория для сканирования
+scan.source.directory=./src
+# Расширения файлов для сканирования (через запятую)
+scan.file.extensions=.java,.kt,.xml,.md
+# Ключевые слова для поиска (через запятую, регистронезависимо)
+scan.keywords=TODO,FIXME

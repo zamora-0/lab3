@@ -1,0 +1,21 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Local configuration (contains environment-specific settings)
+app.properties
+
+# Compiled Java & logs
+*.class
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
